@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: order-spring-batch
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/devdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: devuser
+    password: devpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  batch:
+    job:
+      enabled: false  # 애플리케이션 실행시 자동으로 Job 실행되지 않도록
+    jdbc:
+      initialize-schema: always  # Spring Batch 메타데이터 테이블 자동 생성
+
+logging:
+  level:
+    org.springframework.batch: INFO
+    com.example.batch: INFO

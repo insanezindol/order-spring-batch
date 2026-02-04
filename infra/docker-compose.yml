@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: batch-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: devdb
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dev-network
+
+volumes:
+  mysql_data:
+
+networks:
+  dev-network:
+    driver: bridge
