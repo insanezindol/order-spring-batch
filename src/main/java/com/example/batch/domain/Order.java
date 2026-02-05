@@ -39,11 +39,11 @@ public class Order {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
-    private Double price;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private Long price;
 
-    @Column(nullable = false)
-    private Double totalAmount;
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
+    private Long totalAmount;
 
     @Column(nullable = false)
     private LocalDateTime orderDate;

@@ -1,28 +1,23 @@
 package com.example.batch.writer;
 
 import com.example.batch.domain.Order;
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class OrderItemWriter implements ItemWriter<Order> {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public OrderItemWriter(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
 
     @Override
     public void write(Chunk<? extends Order> chunk) throws Exception {
@@ -41,8 +36,8 @@ public class OrderItemWriter implements ItemWriter<Order> {
                 ps.setString(2, order.getCustomerName());
                 ps.setString(3, order.getProductName());
                 ps.setInt(4, order.getQuantity());
-                ps.setDouble(5, order.getPrice());
-                ps.setDouble(6, order.getTotalAmount());
+                ps.setLong(5, order.getPrice());
+                ps.setLong(6, order.getTotalAmount());
                 ps.setObject(7, order.getOrderDate());
                 ps.setString(8, order.getStatus());
                 ps.setObject(9, LocalDateTime.now());

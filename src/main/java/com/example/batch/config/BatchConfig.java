@@ -7,6 +7,7 @@ import com.example.batch.listener.StepExecuteListener;
 import com.example.batch.processor.OrderItemProcessor;
 import com.example.batch.reader.OrderItemReader;
 import com.example.batch.writer.CompositeOrderWriter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -16,7 +17,6 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.batch.item.support.builder.CompositeItemProcessorBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,25 +26,15 @@ import java.util.Arrays;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class BatchConfig {
 
-    @Autowired
-    private JobRepository jobRepository;
-
-    @Autowired
-    private PlatformTransactionManager transactionManager;
-
-    @Autowired
-    private OrderItemProcessor orderItemProcessor;
-
-    @Autowired
-    private CompositeOrderWriter compositeOrderWriter;
-
-    @Autowired
-    private JobCompletionNotificationListener jobCompletionListener;
-
-    @Autowired
-    private StepExecuteListener stepExecuteListener;
+    private final JobRepository jobRepository;
+    private final PlatformTransactionManager transactionManager;
+    private final OrderItemProcessor orderItemProcessor;
+    private final CompositeOrderWriter compositeOrderWriter;
+    private final JobCompletionNotificationListener jobCompletionListener;
+    private final StepExecuteListener stepExecuteListener;
 
     @Bean
     @StepScope  // Job 실행시마다 새로운 빈 생성
@@ -93,4 +83,5 @@ public class BatchConfig {
                 .delegates(Arrays.asList(orderItemProcessor))
                 .build();
     }
+
 }

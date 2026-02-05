@@ -30,7 +30,7 @@ public class OrderInputDto {
     private String orderDateStr;
 
     private Integer quantity;
-    private Double price;
+    private Long price;
     private LocalDateTime orderDate;
     private boolean isValid = true;
     private String errorMessage;

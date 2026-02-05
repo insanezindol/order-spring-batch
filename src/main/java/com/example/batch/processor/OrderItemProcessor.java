@@ -87,7 +87,7 @@ public class OrderItemProcessor implements ItemProcessor<OrderInputDto, Order> {
 
         // 가격 검증
         try {
-            double price = Double.parseDouble(item.getPriceStr());
+            Long price = Long.parseLong(item.getPriceStr());
             if (price <= 0) {
                 markInvalid(item, "Price must be greater than 0");
                 return;

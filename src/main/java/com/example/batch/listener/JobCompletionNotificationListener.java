@@ -1,9 +1,9 @@
 package com.example.batch.listener;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JobCompletionNotificationListener implements JobExecutionListener {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
@@ -39,7 +39,7 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
         Integer processedCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM processed_orders WHERE processing_result = 'SUCCESS'", Integer.class);
 
         // 총 매출 합계
-        Double totalSales = jdbcTemplate.queryForObject("SELECT SUM(total_amount) FROM orders WHERE status = 'PROCESSED'", Double.class);
+        Long totalSales = jdbcTemplate.queryForObject("SELECT SUM(total_amount) FROM orders WHERE status = 'PROCESSED'", Long.class);
 
         // 상품별 판매량
         var productSales = jdbcTemplate.queryForList(
@@ -58,7 +58,7 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
         log.info("처리 결과:");
         log.info("  - 성공 처리 건수 (orders): {}", (successCount != null ? successCount : 0));
         log.info("  - 리포트 저장 건수 (processed_orders): {}", (processedCount != null ? processedCount : 0));
-        log.info("  - 총 매출액: {}원", (totalSales != null ? String.format("%,.0f", totalSales) : "0"));
+        log.info("  - 총 매출액: {}원", (totalSales != null ? decimalFormat.format(totalSales) : 0));
         log.info("  - 작업 상태: {}", jobExecution.getStatus());
         log.info("----------------------------------------");
 
@@ -67,8 +67,8 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
             for (var row : productSales) {
                 String productName = (String) row.get("product_name");
                 Long quantity = ((BigDecimal) row.get("total_quantity")).longValue();
-                Double sales = (Double) row.get("total_sales");
-                log.info("  - {}: {}개, {}원", productName, quantity, sales != null ? decimalFormat.format(sales) : 0.0);
+                Long sales = ((BigDecimal) row.get("total_sales")).longValue();
+                log.info("  - {}: {}개, {}원", productName, quantity, sales != null ? decimalFormat.format(sales) : 0);
             }
         }
 
