@@ -2,8 +2,8 @@ package com.example.batch.writer;
 
 import com.example.batch.domain.Order;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.support.builder.CompositeItemWriterBuilder;
+import org.springframework.batch.infrastructure.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.support.builder.CompositeItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

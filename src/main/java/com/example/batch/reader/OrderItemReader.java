@@ -4,7 +4,7 @@ import com.example.batch.dto.OrderInputDto;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.infrastructure.item.ItemReader;
 
 import java.io.File;
 import java.io.FileReader;

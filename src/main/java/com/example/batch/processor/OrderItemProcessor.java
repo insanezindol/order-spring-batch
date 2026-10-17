@@ -4,7 +4,7 @@ import com.example.batch.domain.Order;
 import com.example.batch.dto.OrderInputDto;
 import com.example.batch.error.ValidationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

@@ -2,13 +2,11 @@ package com.example.batch.runner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.parameters.JobParameters;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
@@ -21,7 +19,7 @@ import java.nio.file.Paths;
 public class JobRunner implements CommandLineRunner {
 
     private final Job processOrderJob;
-    private final JobRepository jobRepository;
+    private final JobOperator jobOperator;
 
     @Override
     public void run(String... args) throws Exception {
@@ -54,14 +52,8 @@ public class JobRunner implements CommandLineRunner {
         log.info("배치 작업 시작 - 입력 파일: {}", inputFile);
 
         try {
-            // TaskExecutorJobLauncher 생성 및 설정
-            TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
-            jobLauncher.setJobRepository(jobRepository);
-            jobLauncher.setTaskExecutor(new SyncTaskExecutor()); // 동기 실행
-            jobLauncher.afterPropertiesSet(); // 초기화
-
-            // Job 실행
-            jobLauncher.run(processOrderJob, jobParameters);
+            // Job 실행 (Spring Boot가 자동 구성한 JobOperator 사용, 기본 동기 실행)
+            jobOperator.start(processOrderJob, jobParameters);
             log.info("배치 작업 완료");
         } catch (Exception e) {
             log.error("배치 작업 실행 중 오류 발생", e);

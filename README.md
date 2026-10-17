@@ -58,12 +58,13 @@
 
 ## 요구 사항(Prerequisites)
 
-- Java 17 이상(로컬 설치된 JDK)
+- Java 25 (로컬 설치된 JDK, Gradle toolchain이 JDK 25를 사용) / Spring Boot 4.1 (Spring Batch 6)
+  - Gradle이 JDK 25를 찾지 못하면 `JAVA_HOME`을 JDK 25 경로로 지정하거나 `~/.gradle/gradle.properties`에 `org.gradle.java.installations.paths=C:/java/jdk-25.0.4.1` 을 추가하세요.
 - Gradle wrapper: 프로젝트에 포함된 `gradlew.bat` 사용 권장
 - (권장) Docker & Docker Compose: 로컬에서 MySQL을 빨리 띄우려면 사용
   - `infra/docker-compose.yml`에는 MySQL 서비스와 `infra/mysql/init.sql`을 통한 초기 스키마 설정이 포함되어 있습니다.
 
-> 참고: `build.gradle` 파일에서 컴파일/런타임에 필요한 의존성이 정의되어 있습니다. (일반적으로 `spring-boot-starter-batch`, `spring-boot-starter-data-jpa`, `mysql-connector-java` 등)
+> 참고: `build.gradle` 파일에서 컴파일/런타임에 필요한 의존성이 정의되어 있습니다. (`spring-boot-starter-batch-jdbc`, `spring-boot-starter-data-jpa`, `mysql-connector-j` 등)
 
 ## 설정 파일 및 초기화 스크립트
 

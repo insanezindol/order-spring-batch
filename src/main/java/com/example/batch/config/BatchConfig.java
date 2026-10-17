@@ -9,14 +9,14 @@ import com.example.batch.reader.OrderItemReader;
 import com.example.batch.writer.CompositeOrderWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.support.CompositeItemProcessor;
-import org.springframework.batch.item.support.builder.CompositeItemProcessorBuilder;
+import org.springframework.batch.infrastructure.item.support.CompositeItemProcessor;
+import org.springframework.batch.infrastructure.item.support.builder.CompositeItemProcessorBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +54,8 @@ public class BatchConfig {
     @Bean
     public Step processOrderStep() {
         return new StepBuilder("processOrderStep", jobRepository)
-                .<OrderInputDto, Order>chunk(10, transactionManager) // 청크 사이즈 10으로 줄임 (테스트용)
+                .<OrderInputDto, Order>chunk(10) // 청크 사이즈 10으로 줄임 (테스트용)
+                .transactionManager(transactionManager)
                 .reader(orderItemReader(null))  // 런타임에 주입됨
                 .processor(compositeItemProcessor())
                 .writer(compositeOrderWriter.compositeWriter())  // Composite Writer 사용
